@@ -28,3 +28,12 @@ final List<Transaction> transactions = [
     timestamp: DateTime.now(),
   )
 ];
+
+void addNewTransaction(String txTitle, double txAmount) {
+  final newTX = Transaction(
+    title: txTitle,
+    amount: txAmount,
+    timestamp: DateTime.now(),
+    id: DateTime.now().toString(),
+  );
+}

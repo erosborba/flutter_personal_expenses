@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TxCard extends StatelessWidget {
   final String id;
@@ -42,7 +43,7 @@ class TxCard extends StatelessWidget {
                       color: Colors.grey[850],
                       fontWeight: FontWeight.bold),
                 ),
-                Text(timestamp.toString(),
+                Text(DateFormat('EEE, d MMM').format(timestamp),
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey,
