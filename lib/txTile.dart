@@ -22,13 +22,15 @@ class TxCard extends StatelessWidget {
               width: 120,
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  border: Border.all(width: 3, color: Colors.purple)),
+                border:
+                    Border.all(width: 3, color: Theme.of(context).accentColor),
+              ),
               child: Center(
                 child: Text(
-                  'R\$ $amount',
+                  'R\$' + amount.toStringAsFixed(2),
                   style: TextStyle(
                       fontSize: 16,
-                      color: Colors.purple,
+                      color: Theme.of(context).accentColor,
                       fontWeight: FontWeight.bold),
                 ),
               ),

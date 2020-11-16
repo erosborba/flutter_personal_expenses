@@ -12,11 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Despesas',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.deepPurple,
+        accentColor: Colors.purple,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Despesas Pessoais'),
     );
   }
 }
@@ -31,12 +32,76 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Function cleanText() {
+    final titleInput = '';
+    final userInput = null;
+    return cleanText;
+  }
+
   @override
   Widget build(BuildContext context) {
     String titleInput;
     double amountInput;
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (_) => SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: Card(
+                    elevation: 5,
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          TextField(
+                            onChanged: (text) {
+                              titleInput = text;
+                            },
+                            decoration: InputDecoration(labelText: 'Item'),
+                          ),
+                          TextField(
+                            keyboardType:
+                                TextInputType.numberWithOptions(decimal: true),
+                            onChanged: (text) {
+                              amountInput = double.parse(text);
+                            },
+                            decoration: InputDecoration(labelText: 'Valor'),
+                          ),
+                          FlatButton(
+                            child: Text('Adicionar'),
+                            color: Theme.of(context).primaryColor,
+                            textColor: Colors.white,
+                            onPressed: () {
+                              setState(() {
+                                // addNewTransaction(titleInput, amountInput);
+                                transactions.add(
+                                  Transaction(
+                                    id: DateTime.now().toString(),
+                                    title: titleInput,
+                                    amount: amountInput,
+                                    timestamp: DateTime.now(),
+                                  ),
+                                );
+                                Navigator.pop(context);
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }),
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -50,55 +115,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text('Teste'),
               ),
             ),
-            Card(
-              elevation: 5,
-              child: Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextField(
-                      onChanged: (text) {
-                        titleInput = text;
-                      },
-                      decoration: InputDecoration(labelText: 'Item'),
-                    ),
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      onChanged: (text) {
-                        amountInput = double.parse(text);
-                      },
-                      decoration: InputDecoration(labelText: 'Valor'),
-                    ),
-                    FlatButton(
-                      child: Text('Adicionar'),
-                      color: Colors.purple,
-                      textColor: Colors.white,
-                      onPressed: () {
-                        setState(() {
-                          // addNewTransaction(titleInput, amountInput);
-                          transactions.add(Transaction(
-                            id: DateTime.now().toString(),
-                            title: titleInput,
-                            amount: amountInput,
-                            timestamp: DateTime.now(),
-                          ));
-                        });
-                      },
-                    ),
-                  ],
-                ),
+            Container(
+              height: 300,
+              child: ListView.builder(
+                itemBuilder: (ctx, index) {
+                  return TxCard(
+                    id: transactions[index].id,
+                    title: transactions[index].title,
+                    amount: transactions[index].amount,
+                    timestamp: transactions[index].timestamp,
+                  );
+                },
+                itemCount: transactions.length,
               ),
-            ),
-            Column(
-              children: transactions
-                  .map((tx) => TxCard(
-                        id: tx.id,
-                        title: tx.title,
-                        amount: tx.amount,
-                        timestamp: tx.timestamp,
-                      ))
-                  .toList(),
             )
           ],
         ),
